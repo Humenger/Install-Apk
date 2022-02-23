@@ -3,16 +3,18 @@ package cn.sll.installapk;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    private static final String adbPath = "adb.bat";// new File("adb/adb.bat").getAbsolutePath();
+    private static final String adbPath = "adb";// new File("adb/adb.bat").getAbsolutePath();
     //private static final String adbPath =new File("adb/adb.bat").getAbsolutePath();
 
     public static void main(String[] args) {
-        String apkPath = "";//D:\Download\pandownload\596[PRO].apk
+       String apkPath = "";//D:\Download\pandownload\596[PRO].apk
         String deviceID = "";
         if (args.length != 1) {
             System.out.println("请输入apk路径：");
@@ -21,6 +23,8 @@ public class Main {
         } else {
             apkPath = args[0];
         }
+//        apkPath=fixPathSpace(apkPath);
+        System.out.println("apk path:"+apkPath);
         String devices = ProcessUtils.run(adbPath + " devices").data;
         System.out.println("devices:" + devices);
         String[] devicesSplit = devices.split("\n");
@@ -51,11 +55,15 @@ public class Main {
         System.out.println("start install apk...");
         File tempApk=toTempApkFile(apkPath);
         if(tempApk==null)return;
-        String data = ProcessUtils.run(String.format("%s -s %s install -r %s", adbPath, deviceID, tempApk.getAbsolutePath())).data;
-        System.out.println(data);
-        System.out.println("please input any key to exit....");
-        Scanner scanner = new Scanner(System.in);
-        scanner.next();
+        try {
+            String data = ProcessUtils.run(String.format("%s -s %s install -r -d %s", adbPath, deviceID, tempApk.getAbsolutePath())).data;
+            System.out.println("result:" + data);
+            System.out.println("please input any key to exit....");
+            Scanner scanner = new Scanner(System.in);
+            scanner.next();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
     private static File toTempApkFile(String apkPath){
@@ -63,7 +71,7 @@ public class Main {
             File tempFile = new File(System.getProperty("java.io.tmpdir"), "_" + System.currentTimeMillis() + ".apk");
             tempFile.createNewFile();
             tempFile.deleteOnExit();
-            StreamUtils.copy(new FileInputStream(apkPath),new FileOutputStream(tempFile));
+            StreamUtils.copy(new FileInputStream(apkPath),new FileOutputStream(tempFile),true);
             return tempFile;
         }catch (Exception e){
             e.printStackTrace();

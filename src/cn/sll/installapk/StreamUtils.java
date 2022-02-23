@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class StreamUtils {
-    public static void copy(InputStream inputStream, OutputStream outputStream){
+    public static void copy(InputStream inputStream, OutputStream outputStream,boolean close){
         byte[] buffer=new byte[1024];
         int n=0;
         try {
@@ -15,8 +15,16 @@ public class StreamUtils {
         }catch (Exception e){
             e.printStackTrace();
         }
+        if(close){
+            try {
+                inputStream.close();
+                outputStream.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
     }
-    public static void copyN(InputStream inputStream, OutputStream outputStream,int length){
+    public static void copyN(InputStream inputStream, OutputStream outputStream,int length,boolean close){
         if(length<=0)return;
         byte[] buffer=new byte[Math.min(length,1024)];
         int n=0;
@@ -31,6 +39,14 @@ public class StreamUtils {
             }
         }catch (Exception e){
             e.printStackTrace();
+        }
+        if(close){
+            try {
+                inputStream.close();
+                outputStream.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 }

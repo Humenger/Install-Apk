@@ -66,6 +66,7 @@ public class ProcessUtils {
      * @return
      */
     public static Result run(List<String> commend, String charsetName) {
+        System.out.println("run:"+ commend);
         Result result = new Result();
         InputStream is = null;
         try {
