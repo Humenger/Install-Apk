@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="InstallApk:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/InstallApk_jar</output-path>
+    <root id="archive" name="InstallApk.jar">
+      <element id="module-output" name="InstallApk" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_installapk" default="compile.module.installapk">
+  <dirname property="module.installapk.basedir" file="${ant.file.module_installapk}"/>
+  
+  <property name="module.jdk.home.installapk" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.installapk" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.installapk" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.installapk" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="installapk.output.dir" value="${module.installapk.basedir}/out/production/InstallApk"/>
+  <property name="installapk.testoutput.dir" value="${module.installapk.basedir}/out/test/InstallApk"/>
+  
+  <path id="installapk.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="installapk.module.production.classpath">
+    <path refid="${module.jdk.classpath.installapk}"/>
+  </path>
+  
+  <path id="installapk.runtime.production.module.classpath">
+    <pathelement location="${installapk.output.dir}"/>
+  </path>
+  
+  <path id="installapk.module.classpath">
+    <path refid="${module.jdk.classpath.installapk}"/>
+    <pathelement location="${installapk.output.dir}"/>
+  </path>
+  
+  <path id="installapk.runtime.module.classpath">
+    <pathelement location="${installapk.testoutput.dir}"/>
+    <pathelement location="${installapk.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.installapk">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.installapk">
+    <patternset refid="excluded.from.module.installapk"/>
+  </patternset>
+  
+  <path id="installapk.module.sourcepath">
+    <dirset dir="${module.installapk.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.installapk" depends="compile.module.installapk.production,compile.module.installapk.tests" description="Compile module InstallApk"/>
+  
+  <target name="compile.module.installapk.production" depends="register.custom.compilers" description="Compile module InstallApk; production classes">
+    <mkdir dir="${installapk.output.dir}"/>
+    <javac2 destdir="${installapk.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.installapk}/javac">
+      <compilerarg line="${compiler.args.installapk}"/>
+      <bootclasspath refid="installapk.module.bootclasspath"/>
+      <classpath refid="installapk.module.production.classpath"/>
+      <src refid="installapk.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.installapk"/>
+    </javac2>
+    
+    <copy todir="${installapk.output.dir}">
+      <fileset dir="${module.installapk.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.installapk.tests" depends="register.custom.compilers,compile.module.installapk.production" description="compile module InstallApk; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.installapk" description="cleanup module">
+    <delete dir="${installapk.output.dir}"/>
+    <delete dir="${installapk.testoutput.dir}"/>
+  </target>
+</project>
