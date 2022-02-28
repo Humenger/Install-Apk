@@ -8,7 +8,7 @@ The installation apk tool on the window OS.
 # Use
 ## Window SendTo menu
 > Tested only window 10
-- Create installApk.bat file
+- Create the `installApk.bat` file in the directory where `installApk.jar` is located and enter the following content:
 ```bat
 java -jar %~dp0/InstallApk.jar %1
 
