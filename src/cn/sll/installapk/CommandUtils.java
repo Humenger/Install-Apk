@@ -13,7 +13,7 @@ import java.util.StringTokenizer;
  * @description 进程工具类
  * @date 2019/5/5 13:40
  */
-public class ProcessUtils {
+public class CommandUtils {
 
     /**
      * 默认字符集
@@ -131,7 +131,7 @@ public class ProcessUtils {
      */
     public static void main(String[] args) {
         //单行字符串命令
-        Result r = ProcessUtils.run("cmd /C ipconfig /all", "GBK");
+        Result r = CommandUtils.run("cmd /C ipconfig /all", "GBK");
         System.out.println("code:" + r.code + "\ndata:" + r.data);
         //字符串列表命令
 /*		List<String> commend = new ArrayList<>();
