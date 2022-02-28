@@ -3,11 +3,12 @@ The installation apk tool on the window OS.
 # Features
 - Support for multiple devices
 - Multi-adb process conflict handling
+- Support Apk path contains special characters
 - More(todo)
 # Use
 ## Window SendTo menu
 > Tested only window 10
-- build installApk.bat file
+- Create installApk.bat file
 ```bat
 java -jar %~dp0/InstallApk.jar %1
 
