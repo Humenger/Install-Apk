@@ -1,8 +1,12 @@
 # Install-Apk
 The installation apk tool on the window OS.
+# Features
+- Support for multiple devices
+- Multi-adb process conflict handling
+- More(todo)
 # Use
 ## Window SendTo menu
-> Test on window 10
+> Tested only window 10
 - build installApk.bat file
 ```bat
 java -jar %~dp0/InstallApk.jar %1
