@@ -13,6 +13,7 @@ The installation apk tool on the window OS.
 java -jar %~dp0/InstallApk.jar %1
 
 ```
+> You need to configure the java environment first
 - `Win+R` input `shell:sendto` open SendTo folder & create installApk.bat shortcut in the folder\
 ![images](./images/folder.png)
 - Test with any `.apk` file\
