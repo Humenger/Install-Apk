@@ -6,11 +6,27 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.StringTokenizer;
 
 public final class Windows {
+    private static final String OS = System.getProperty("os.name").toLowerCase();
+    public static final String CRLF =System.getProperty("line.separator");
+    public static String userHome(){
+        return System.getProperty("user.home");
+    }
+    public static void printSystemProperties(){
+        System.getProperties().list(System.out);
+        System.out.println("-------system env------");
+        for(String key:System.getenv().keySet()){
+            System.out.println(key+"="+System.getenv(key));
+        }
+    }
+    public static boolean isWindows(){
+        return OS.contains("windows");
+    }
     public static String getAdbPath() {
-        Result result= execCmd("cmd /c wmic process list brief | findstr adb.exe");
+        Result result= execCmd("cmd /c wmic process list brief | findstr adb");
 //        CommandUtils.Result result=CommandUtils.run("tasklist /fi \"imagename eq adb.exe\" /fo list");
         if(result.code==0){
             System.out.println("[adb process list]:\n"+result.data);
@@ -18,7 +34,8 @@ public final class Windows {
             System.out.println("[process id]:"+row[3]);
             result= execCmd("cmd /c wmic process where processid="+row[3]+" get executablepath");
             if(result.code==0){
-                return result.data.split("(\r\n)+")[1];
+                String[] split=result.data.split("(\r\n)+");
+                return split.length>=2?split[1]:"adb";
             }
         }
         return "adb";
@@ -28,9 +45,7 @@ public final class Windows {
         Result result = new Result();
         InputStream is = null;
         try {
-            //重定向异常输出流
             Process process = new ProcessBuilder(command).redirectErrorStream(true).start();
-            //读取输入流中的数据
             is = process.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(is, charsetName));
             StringBuilder data = new StringBuilder();
@@ -39,14 +54,12 @@ public final class Windows {
                 data.append(line).append(System.lineSeparator());
                 //System.out.println( line);
             }
-            //获取返回码
             result.code = process.waitFor();
-            //获取执行结果
             result.data = data.toString().trim();
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            //关闭数据流
+            //close stream
             try {
                 is.close();
             } catch (IOException e) {
